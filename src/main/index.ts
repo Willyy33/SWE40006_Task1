@@ -1,13 +1,16 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { autoUpdater } from 'electron-updater'
+
+let mainWindow: BrowserWindow | null = null
 
 function createWindow(): void {
   // Define icon path for Linux
   const icon = join(__dirname, '../resources/icon.png');
 
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 360,
     height: 420,
     show: false,
@@ -21,7 +24,7 @@ function createWindow(): void {
   })
 
   mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
+    mainWindow!.show()
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -56,6 +59,25 @@ app.whenReady().then(() => {
   ipcMain.on('ping', () => console.log('pong'))
 
   createWindow()
+
+  // Initialize auto-updater
+  if (!is.dev) {
+    autoUpdater.checkForUpdatesAndNotify()
+  }
+
+  // Listen for update available
+  autoUpdater.on('update-available', () => {
+    if (mainWindow) {
+      mainWindow.webContents.send('update-available')
+    }
+  })
+
+  // Listen for update downloaded
+  autoUpdater.on('update-downloaded', () => {
+    if (mainWindow) {
+      mainWindow.webContents.send('update-downloaded')
+    }
+  })
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the

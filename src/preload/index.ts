@@ -1,8 +1,12 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
-const api = {}
+const api = {
+  onUpdateAvailable: (callback: () => void) => ipcRenderer.on('update-available', callback),
+  onUpdateDownloaded: (callback: () => void) => ipcRenderer.on('update-downloaded', callback),
+  installUpdate: () => ipcRenderer.invoke('quitAndInstall'),
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
