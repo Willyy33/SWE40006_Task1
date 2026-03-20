@@ -5,7 +5,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 const api = {
   onUpdateAvailable: (callback: () => void) => ipcRenderer.on('update-available', callback),
   onUpdateDownloaded: (callback: () => void) => ipcRenderer.on('update-downloaded', callback),
-  installUpdate: () => ipcRenderer.invoke('quitAndInstall'),
+  installUpdate: () => ipcRenderer.invoke('install-update'),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

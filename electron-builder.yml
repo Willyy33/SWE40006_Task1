@@ -42,6 +42,7 @@ linux:
 appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
+
 publish:
   - provider: github
     owner: Willyy33
