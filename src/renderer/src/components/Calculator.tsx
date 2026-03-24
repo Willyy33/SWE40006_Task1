@@ -86,7 +86,7 @@ const styles = {
     width: "100vw",
     display: "flex",
     flexDirection: "column",
-    backgroundColor: "green"
+    backgroundColor: "wheat"
   } as React.CSSProperties
 
 };
